@@ -6,7 +6,7 @@
 
 namespace bigint_ns {
 
-	BigInteger& BigInteger::Rev(int sign) noexcept {
+	BigInteger& BigInteger::Rev(const int sign) noexcept {
 		if (sign == kPlus) return *this;
 		for (int i = 0; i < kMaxSize_; ++i) {
 			digits_[i] = 9 - digits_[i];
@@ -26,7 +26,7 @@ namespace bigint_ns {
 		BigInteger::Rev(sign_);
 	}
 	
-	BigInteger::BigInteger(const char* number_string, int sign) {
+	BigInteger::BigInteger(const char* number_string, const int sign) {
 		BigInteger::SetDigits(number_string);
 		sign_ = sign;
 		BigInteger::Rev(sign);
@@ -38,15 +38,15 @@ namespace bigint_ns {
 		}
 	}
 
-	void BigInteger::SetSign(int sign) {
+	void BigInteger::SetSign(const int sign) {
 		if (sign != kPlus && sign != kMinus) {
-			throw std::exception("Sign value should be 0 (+) or 1 (-)");
+			throw std::invalid_argument("Sign value should be 0 (+) or 1 (-)");
 		}
 		BigInteger::Rev(sign_ != sign);
 		sign_ = sign;
 	}
 
-	void BigInteger::SetLength(int length) {
+	void BigInteger::SetLength(const int length) {
 		int d_length = length - length_;
 		if (d_length < 0) {
 			DecreaseOrder(abs(d_length));
@@ -59,7 +59,7 @@ namespace bigint_ns {
 	void BigInteger::SetDigits(const char* digits) {
 		int length = strlen(digits);
 		if (length > kMaxSize_) {
-			throw std::exception("The Length of the input number upper than the MaxSize");
+			throw std::range_error("The Length of the input number upper than the MaxSize");
 		}
 		BigInteger::ClearDigits();
 		length_ = length;
@@ -92,10 +92,10 @@ namespace bigint_ns {
 		res.sign_ = sign_sum % 2;
 		if (sign_ == x.sign_) {
 			if (sign_ == kMinus && res.sign_ == kPlus) {
-				throw std::exception("Negative overflow!");
+				throw std::overflow_error("Negative overflow!");
 			}
 			if (sign_ == kPlus && res.sign_ == kMinus) {
-				throw std::exception("Positive overflow!");
+				throw std::overflow_error("Positive overflow!");
 			}
 		}
 		if (d_res != 0) {
@@ -114,9 +114,9 @@ namespace bigint_ns {
 		return BigInteger::GetSumWith(x_rev).ChangeLength();
 	}
 
-	BigInteger& BigInteger::IncreaseOrder(int x) {
+	BigInteger& BigInteger::IncreaseOrder(const int x) {
 		if (length_ + x > kMaxSize_) {
-			throw std::exception("You can't increase the order, because the order equals to MaxSize!!!");
+			throw std::range_error("You can't increase the order, because the order equals to MaxSize!!!");
 		}
 		memcpy_s(digits_ + x, length_, digits_, length_);
 		for (int i = 0; i < x; ++i) {
@@ -125,9 +125,9 @@ namespace bigint_ns {
 		return BigInteger::ChangeLength();
 	}
 
-	BigInteger& BigInteger::DecreaseOrder(int x) {
+	BigInteger& BigInteger::DecreaseOrder(const int x) {
 		if (length_ - x < 1) {
-			throw std::exception("You can't decrease the order, because the order minimum is \"1\"!!!");
+			throw std::range_error("You can't decrease the order, because the order minimum is \"1\"!!!");
 		}
 		memcpy_s(digits_, length_ - x, digits_ + x, length_ - x);
 		for (int i = length_ - 1; i >= length_ - x; --i) {

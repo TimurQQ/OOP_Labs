@@ -15,6 +15,7 @@ namespace bigint_ns {
         }
         std::cout << "Done!" << std::endl;
     }
+	
     void PlaceSample(BigInteger& sample) {
         PlaceSample(sample, "¬ведите новое значение: ");
     }
