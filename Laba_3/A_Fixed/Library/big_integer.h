@@ -16,7 +16,7 @@ namespace bigint_ns {
 		int length() const { return length_; }
 		int sign() const { return digits_[kMaxSize_]; }
 		static int max_size() { return kMaxSize_; }
-		void set_sign(const char sign);
+		void set_sign(const int sign);
 		void set_digits(const char* digits);
 		BigInteger Plus(const BigInteger& x) const;
 		BigInteger Minus(const BigInteger& x) const;
@@ -32,10 +32,10 @@ namespace bigint_ns {
 		char digits_[kMaxSize_ + 1]; // An additional byte is allocated for the sign
 		int length_ = 0;
 		BigInteger TensComplement() const noexcept;
-		static int UnsignedSum(BigInteger& a, const BigInteger& b); // The result is stored in the first argument
+		static int UnsignedSum(BigInteger& a, const BigInteger& b) noexcept; // The result is stored in the first argument
 		BigInteger& ChangeLength() noexcept;
-		bool IsDecimal(const char* string);
-		bool IsCorrect(const char* signed_number, bool& is_signed);
+		bool IsDecimal(const char* string) const noexcept;
+		bool IsCorrect(const char* signed_number, bool& is_signed) const noexcept;
 	};
 }
 

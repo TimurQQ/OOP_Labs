@@ -153,7 +153,7 @@ namespace bigint_ns {
 		return res;
 	}
 	
-	int BigInteger::UnsignedSum(BigInteger& a, const BigInteger& b) {
+	int BigInteger::UnsignedSum(BigInteger& a, const BigInteger& b) noexcept {
 		int d_res = 0;
 		for (int i = 0; i < kMaxSize_; ++i) {
 			int digits_sum = a.digits_[i] + b.digits_[i] + d_res;
@@ -174,7 +174,7 @@ namespace bigint_ns {
 		return *this;
 	}
 
-	bool BigInteger::IsDecimal(const char* string) {
+	bool BigInteger::IsDecimal(const char* string) const noexcept {
 		int length = strlen(string);
 		for (int i = 0; i < min(length, kMaxSize_); ++i) {
 			if (!(string[i] <= '9' && string[i] >= '0')) {
@@ -184,7 +184,7 @@ namespace bigint_ns {
 		return true;
 	}
 
-	bool BigInteger::IsCorrect(const char* number, bool& is_signed) {
+	bool BigInteger::IsCorrect(const char* number, bool& is_signed) const noexcept {
 		if (number[0] == '+' || number[0] == '-') is_signed = true;
 		int length = strlen(number + is_signed);
 		return BigInteger::IsDecimal(number + is_signed) && length <= kMaxSize_;
